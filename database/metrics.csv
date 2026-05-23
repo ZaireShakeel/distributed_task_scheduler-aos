@@ -1,0 +1,5 @@
+task,success,worker,wait_s,exec_s,turnaround_s,retries
+fetch,True,worker-1,0.041,0.561,0.602,0
+flaky_process,True,worker-1,1.046,0.307,1.353,0
+report,True,worker-1,1.553,0.262,1.815,0
+notify,True,worker-2,1.559,0.105,1.664,0

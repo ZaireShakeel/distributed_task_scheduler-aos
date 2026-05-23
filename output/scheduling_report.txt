@@ -1,0 +1,114 @@
+==============================================================
+   OS PROCESS SCHEDULING ANALYSIS — OUTPUT REPORT
+   CS-511 Advanced Operating Systems | ITU Lahore
+==============================================================
+
+  Pipeline     : OS Process Scheduling Analysis
+  Input File   : input/processes.txt
+  Total Procs  : 25
+  Run by       : DAG Distributed Task Scheduler
+
+--------------------------------------------------------------
+  SECTION 1 — HIGH PRIORITY PROCESSES (priority >= 5)
+--------------------------------------------------------------
+  Count : 16 out of 25
+
+  [P06]  disk_scheduler     Priority=10  Burst=3ms
+  [P10]  interrupt_hdlr     Priority=10  Burst=2ms
+  [P18]  clock_irq          Priority=10  Burst=1ms
+  [P01]  sys_init           Priority=9  Burst=4ms
+  [P15]  scheduler_proc     Priority=9  Burst=4ms
+  [P24]  sys_monitor        Priority=9  Burst=5ms
+  [P02]  kernel_thread      Priority=8  Burst=7ms
+  [P07]  memory_manager     Priority=8  Burst=9ms
+  [P22]  paging_daemon      Priority=8  Burst=13ms
+  [P05]  network_daemon     Priority=7  Burst=18ms
+  [P13]  cache_mgr          Priority=7  Burst=8ms
+  [P21]  net_socket         Priority=7  Burst=6ms
+  [P04]  file_manager       Priority=6  Burst=5ms
+  [P16]  io_daemon          Priority=6  Burst=11ms
+  [P11]  swap_daemon        Priority=5  Burst=15ms
+  [P19]  fs_watcher         Priority=5  Burst=9ms
+
+--------------------------------------------------------------
+  SECTION 2 — CPU BURST TIME STATISTICS
+--------------------------------------------------------------
+  Total Processes   : 25
+  Mean Burst Time   : 13 ms
+  Median Burst Time : 9 ms
+  Std Deviation     : 9.89 ms
+  Min Burst Time    : 1 ms
+  Max Burst Time    : 35 ms
+  Total CPU Time    : 325 ms
+
+--------------------------------------------------------------
+  SECTION 3 — FCFS WAIT TIME ANALYSIS (per process)
+--------------------------------------------------------------
+  PID   Name               Wait(ms)     Priority
+  --------------------------------------------
+  P01   sys_init           0            9
+  P02   kernel_thread      3            8
+  P03   user_shell         9            4
+  P04   file_manager       20           6
+  P05   network_daemon     24           7  *** STARVED
+  P06   disk_scheduler     41           10  *** STARVED
+  P07   memory_manager     43           8  *** STARVED
+  P08   user_app_A         51           2  *** STARVED
+  P09   user_app_B         75           3  *** STARVED
+  P10   interrupt_hdlr     96           10  *** STARVED
+  P11   swap_daemon        97           5  *** STARVED
+  P12   log_writer         111          4  *** STARVED
+  P13   cache_mgr          116          7  *** STARVED
+  P14   user_app_C         123          1  *** STARVED
+  P15   scheduler_proc     152          9  *** STARVED
+  P16   io_daemon          155          6  *** STARVED
+  P17   user_app_D         165          2  *** STARVED
+  P18   clock_irq          192          10  *** STARVED
+  P19   fs_watcher         192          5  *** STARVED
+  P20   user_app_E         200          1  *** STARVED
+  P21   net_socket         234          7  *** STARVED
+  P22   paging_daemon      239          8  *** STARVED
+  P23   user_app_F         251          3  *** STARVED
+  P24   sys_monitor        277          9  *** STARVED
+  P25   bg_service         281          4  *** STARVED
+
+--------------------------------------------------------------
+  SECTION 4 — STARVATION ANALYSIS
+--------------------------------------------------------------
+  Threshold     : 20 ms wait time
+  Status        : DETECTED — 21 process(es) starved
+
+  Starved processes:
+    - network_daemon (PID P05) waited 24ms at priority 7
+    - disk_scheduler (PID P06) waited 41ms at priority 10
+    - memory_manager (PID P07) waited 43ms at priority 8
+    - user_app_A (PID P08) waited 51ms at priority 2
+    - user_app_B (PID P09) waited 75ms at priority 3
+    - interrupt_hdlr (PID P10) waited 96ms at priority 10
+    - swap_daemon (PID P11) waited 97ms at priority 5
+    - log_writer (PID P12) waited 111ms at priority 4
+    - cache_mgr (PID P13) waited 116ms at priority 7
+    - user_app_C (PID P14) waited 123ms at priority 1
+    - scheduler_proc (PID P15) waited 152ms at priority 9
+    - io_daemon (PID P16) waited 155ms at priority 6
+    - user_app_D (PID P17) waited 165ms at priority 2
+    - clock_irq (PID P18) waited 192ms at priority 10
+    - fs_watcher (PID P19) waited 192ms at priority 5
+    - user_app_E (PID P20) waited 200ms at priority 1
+    - net_socket (PID P21) waited 234ms at priority 7
+    - paging_daemon (PID P22) waited 239ms at priority 8
+    - user_app_F (PID P23) waited 251ms at priority 3
+    - sys_monitor (PID P24) waited 277ms at priority 9
+    - bg_service (PID P25) waited 281ms at priority 4
+
+--------------------------------------------------------------
+  SECTION 5 — SCHEDULING RECOMMENDATION
+--------------------------------------------------------------
+  Low-priority processes are experiencing starvation under FCFS.
+  RECOMMENDATION: Switch to Priority Scheduling with Aging.
+  Aging gradually increases priority of waiting processes,
+  preventing indefinite starvation of low-priority processes.
+
+==============================================================
+  END OF REPORT
+==============================================================

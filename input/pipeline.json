@@ -1,0 +1,49 @@
+{
+  "pipeline_name": "OS Process Scheduling Analysis",
+  "description": "Analyzes CPU process logs to compute scheduling metrics and generate a system report.",
+  "workers": 3,
+  "tasks": [
+    {
+      "name": "load_processes",
+      "func": "read_process_log",
+      "args": { "file": "input/processes.txt" },
+      "priority": 1,
+      "dependencies": []
+    },
+    {
+      "name": "filter_high_priority",
+      "func": "filter_by_priority",
+      "args": { "min_priority": 5 },
+      "priority": 2,
+      "dependencies": ["load_processes"]
+    },
+    {
+      "name": "compute_burst_stats",
+      "func": "compute_burst_statistics",
+      "args": { "column": "burst_time" },
+      "priority": 2,
+      "dependencies": ["load_processes"]
+    },
+    {
+      "name": "compute_wait_stats",
+      "func": "compute_wait_statistics",
+      "args": {},
+      "priority": 2,
+      "dependencies": ["load_processes"]
+    },
+    {
+      "name": "detect_starvation",
+      "func": "detect_starvation",
+      "args": { "wait_threshold": 20 },
+      "priority": 3,
+      "dependencies": ["compute_wait_stats"]
+    },
+    {
+      "name": "generate_report",
+      "func": "write_report",
+      "args": { "output": "output/scheduling_report.txt" },
+      "priority": 4,
+      "dependencies": ["filter_high_priority", "compute_burst_stats", "detect_starvation"]
+    }
+  ]
+}

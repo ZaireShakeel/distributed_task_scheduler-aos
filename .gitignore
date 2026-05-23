@@ -1,0 +1,6 @@
+﻿.venv/
+__pycache__/
+*.pyc
+database/task_state.db
+.pytest_cache/
+output/metrics.csv
